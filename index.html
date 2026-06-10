@@ -3,348 +3,614 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cruzz Avenue — Inferno 2.0 Menu</title>
-  <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet" />
+  <title>CRUZZ AVENUE — INFERNO 2.0 — MENU</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Anton&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
+      --bg: #0a0008;
+      --ink: #16001f;
       --pink: #ff2d78;
-      --pink-glow: #ff2d7880;
-      --purple: #7b2fff;
-      --purple-dark: #1a0033;
-      --bg: #0d0010;
-      --card: #160022;
-      --border: #ff2d7840;
-      --text: #f0d0ff;
-      --muted: #9060aa;
+      --hot: #ff0a54;
+      --magenta: #e800a8;
+      --violet: #8b2fff;
+      --ember: #ff6b35;
+      --cream: #ffe9f3;
+      --muted: #a06db8;
+      --card: #14001d;
     }
+
+    html { scroll-behavior: smooth; }
 
     body {
-      background-color: var(--bg);
-      background-image:
-        radial-gradient(ellipse 80% 60% at 50% -10%, #3a006680 0%, transparent 70%),
-        radial-gradient(ellipse 60% 40% at 80% 80%, #ff2d7820 0%, transparent 60%);
-      color: var(--text);
-      font-family: 'Rajdhani', sans-serif;
-      min-height: 100vh;
-      padding: 0 0 60px;
-    }
-
-    /* ── HEADER ── */
-    header {
-      text-align: center;
-      padding: 48px 24px 32px;
-      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--cream);
+      font-family: 'Space Mono', monospace;
+      overflow-x: hidden;
       position: relative;
     }
 
-    header::after {
+    /* ── GRAIN OVERLAY ── */
+    body::after {
       content: '';
-      position: absolute;
-      bottom: -1px; left: 50%; transform: translateX(-50%);
-      width: 200px; height: 2px;
-      background: linear-gradient(90deg, transparent, var(--pink), transparent);
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 100;
+      opacity: 0.5;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
     }
 
-    .event-badge {
+    /* ── AMBIENT GLOW LAYERS ── */
+    .glow {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .glow-1 {
+      width: 60vw; height: 60vw;
+      top: -20vw; left: -15vw;
+      background: radial-gradient(circle, #8b2fff30, transparent 70%);
+      animation: drift 14s ease-in-out infinite alternate;
+    }
+    .glow-2 {
+      width: 50vw; height: 50vw;
+      bottom: -10vw; right: -15vw;
+      background: radial-gradient(circle, #ff2d7828, transparent 70%);
+      animation: drift 18s ease-in-out infinite alternate-reverse;
+    }
+    @keyframes drift {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(6vw, 4vw) scale(1.15); }
+    }
+
+    /* ── EMBERS ── */
+    .ember {
+      position: fixed;
+      bottom: -10px;
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--ember);
+      box-shadow: 0 0 6px 2px #ff6b3580;
+      pointer-events: none;
+      z-index: 1;
+      animation: rise linear infinite;
+      opacity: 0;
+    }
+    @keyframes rise {
+      0%   { transform: translateY(0) translateX(0); opacity: 0; }
+      8%   { opacity: 0.9; }
+      100% { transform: translateY(-110vh) translateX(var(--sway, 40px)); opacity: 0; }
+    }
+
+    /* ── TICKER ── */
+    .ticker {
+      position: relative;
+      z-index: 5;
+      background: var(--pink);
+      color: var(--ink);
+      overflow: hidden;
+      white-space: nowrap;
+      padding: 8px 0;
+      transform: rotate(-1.2deg) scale(1.02);
+      margin-top: -2px;
+      border-top: 3px solid var(--ink);
+      border-bottom: 3px solid var(--ink);
+    }
+    .ticker-track {
       display: inline-block;
+      animation: scroll-left 22s linear infinite;
+      font-family: 'Bungee', cursive;
+      font-size: 13px;
+      letter-spacing: 2px;
+    }
+    @keyframes scroll-left {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 72px 20px 56px;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      font-family: 'Space Mono', monospace;
       font-size: 11px;
       font-weight: 700;
-      letter-spacing: 3px;
-      text-transform: uppercase;
+      letter-spacing: 6px;
+      color: var(--ember);
+      margin-bottom: 24px;
+      animation: fadeUp 0.7s ease both;
+    }
+
+    .hero h1 {
+      font-family: 'Bungee', cursive;
+      font-size: clamp(3.2rem, 13vw, 8rem);
+      line-height: 0.92;
+      color: var(--cream);
+      text-shadow:
+        4px 4px 0 var(--hot),
+        8px 8px 0 var(--ink),
+        0 0 60px #ff2d7860;
+      animation: fadeUp 0.7s 0.1s ease both;
+    }
+
+    .hero h1 .row2 {
+      display: block;
       color: var(--pink);
-      border: 1px solid var(--pink);
-      padding: 4px 14px;
-      border-radius: 2px;
-      margin-bottom: 20px;
-      text-shadow: 0 0 10px var(--pink-glow);
+      -webkit-text-stroke: 2px var(--cream);
+      text-shadow:
+        4px 4px 0 var(--ink),
+        0 0 60px #ff2d7880;
     }
 
-    h1 {
-      font-family: 'Black Ops One', cursive;
-      font-size: clamp(2.8rem, 10vw, 5.5rem);
-      line-height: 0.9;
-      background: linear-gradient(135deg, #fff 20%, var(--pink) 60%, #ff6eb0 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-shadow: none;
-      filter: drop-shadow(0 0 20px var(--pink-glow));
-      letter-spacing: -1px;
-    }
-
-    .theme-tag {
+    .inferno {
       display: inline-block;
-      margin-top: 14px;
-      font-family: 'Black Ops One', cursive;
-      font-size: 1rem;
-      letter-spacing: 4px;
-      color: var(--purple);
-      text-shadow: 0 0 12px #7b2fff80;
-    }
-
-    .event-meta {
-      margin-top: 10px;
-      font-size: 0.85rem;
-      letter-spacing: 1px;
-      color: var(--muted);
-    }
-
-    /* ── MENU CONTAINER ── */
-    main {
-      max-width: 640px;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
-
-    /* ── SECTION LABEL ── */
-    .section-label {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin: 40px 0 16px;
-    }
-
-    .section-label span {
-      font-family: 'Black Ops One', cursive;
-      font-size: 0.75rem;
-      letter-spacing: 4px;
+      margin-top: 28px;
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(1.1rem, 4vw, 1.7rem);
+      letter-spacing: 10px;
       text-transform: uppercase;
-      color: var(--pink);
-      text-shadow: 0 0 10px var(--pink-glow);
-      white-space: nowrap;
+      color: transparent;
+      background: linear-gradient(90deg, var(--ember), var(--hot), var(--magenta), var(--ember));
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      animation: fadeUp 0.7s 0.2s ease both, flame-shift 4s linear infinite;
+    }
+    @keyframes flame-shift {
+      from { background-position: 0% 0; }
+      to   { background-position: 300% 0; }
     }
 
-    .section-label::after {
+    .hero-meta {
+      margin-top: 20px;
+      font-size: 12px;
+      letter-spacing: 3px;
+      color: var(--muted);
+      text-transform: uppercase;
+      animation: fadeUp 0.7s 0.3s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── MAIN ── */
+    main {
+      position: relative;
+      z-index: 2;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 24px 20px 80px;
+    }
+
+    /* ── SECTION HEADER ── */
+    .sec {
+      margin: 64px 0 24px;
+      position: relative;
+    }
+    .sec:first-child { margin-top: 24px; }
+
+    .sec-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      color: var(--ember);
+    }
+
+    .sec h2 {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(2rem, 7vw, 3.2rem);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--cream);
+      line-height: 1;
+      margin-top: 6px;
+    }
+
+    .sec h2 .accent { color: var(--pink); }
+
+    .sec::after {
       content: '';
-      flex: 1;
-      height: 1px;
-      background: linear-gradient(90deg, var(--border), transparent);
+      display: block;
+      margin-top: 14px;
+      height: 4px;
+      background: repeating-linear-gradient(
+        -45deg,
+        var(--pink) 0 10px,
+        transparent 10px 20px
+      );
     }
 
-    /* ── MENU CARD ── */
-    .menu-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      overflow: hidden;
-    }
-
-    .menu-item {
+    /* ── ITEMS ── */
+    .item {
       display: flex;
-      justify-content: space-between;
       align-items: baseline;
-      padding: 14px 20px;
-      gap: 16px;
-      border-bottom: 1px solid #ffffff08;
-      transition: background 0.2s;
+      gap: 12px;
+      padding: 15px 4px;
+      border-bottom: 1px dashed #ff2d7830;
     }
-
-    .menu-item:last-child { border-bottom: none; }
-
-    .menu-item:hover { background: #ffffff05; }
 
     .item-name {
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--text);
-      line-height: 1.3;
-    }
-
-    .item-sub {
-      font-size: 0.78rem;
-      color: var(--muted);
-      margin-top: 2px;
-      font-weight: 400;
-    }
-
-    .item-price {
-      font-family: 'Black Ops One', cursive;
-      font-size: 0.95rem;
-      color: var(--pink);
-      text-shadow: 0 0 8px var(--pink-glow);
-      white-space: nowrap;
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: 0.5px;
       flex-shrink: 0;
     }
 
-    /* ── SIDES LIST ── */
-    .sides-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      padding: 16px 20px;
+    .item-dots {
+      flex: 1;
+      border-bottom: 2px dotted #a06db850;
+      transform: translateY(-4px);
     }
 
-    .side-chip {
-      background: #ffffff08;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 5px 12px;
-      font-size: 0.82rem;
-      color: var(--text);
-      font-weight: 600;
+    .item-price {
+      font-family: 'Bungee', cursive;
+      font-size: 15px;
+      color: var(--pink);
+      flex-shrink: 0;
+      text-shadow: 0 0 14px #ff2d7860;
     }
 
-    /* ── SHISHA FEATURE ── */
-    .shisha-card {
-      background: linear-gradient(135deg, #1a002a, #200030);
-      border: 1px solid var(--pink);
-      border-radius: 8px;
-      padding: 20px 24px;
+    .item.big .item-name { font-size: 17px; }
+    .item.big .item-price { font-size: 18px; }
+
+    /* ── COMBO CARDS ── */
+    .combos {
+      display: grid;
+      gap: 14px;
+    }
+
+    .combo {
+      position: relative;
+      background: var(--card);
+      border: 2px solid var(--pink);
+      padding: 22px 22px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 40px;
-      box-shadow: 0 0 30px var(--pink-glow), inset 0 0 30px #ff2d7808;
+      gap: 16px;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      box-shadow: 6px 6px 0 #ff2d7825;
+    }
+    .combo:hover {
+      transform: translate(-3px, -3px);
+      box-shadow: 10px 10px 0 #ff2d7840;
     }
 
-    .shisha-label {
-      font-family: 'Black Ops One', cursive;
-      font-size: 1.4rem;
-      color: #fff;
-      text-shadow: 0 0 15px var(--pink-glow);
+    .combo:nth-child(2) { transform: rotate(0.6deg); }
+    .combo:nth-child(2):hover { transform: rotate(0.6deg) translate(-3px, -3px); }
+    .combo:nth-child(3) { transform: rotate(-0.5deg); }
+    .combo:nth-child(3):hover { transform: rotate(-0.5deg) translate(-3px, -3px); }
+
+    .combo-name {
+      font-family: 'Anton', sans-serif;
+      font-size: 20px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+    .combo-sub {
+      font-size: 11px;
+      color: var(--muted);
       letter-spacing: 2px;
+      margin-top: 4px;
+      text-transform: uppercase;
+    }
+    .combo-price {
+      font-family: 'Bungee', cursive;
+      font-size: 22px;
+      color: var(--pink);
+      text-shadow: 0 0 18px #ff2d7870;
+      white-space: nowrap;
     }
 
+    .combo.flagship {
+      border-color: var(--ember);
+      box-shadow: 6px 6px 0 #ff6b3530;
+    }
+    .combo.flagship .combo-price { color: var(--ember); text-shadow: 0 0 18px #ff6b3570; }
+    .combo.flagship::before {
+      content: 'CREW SIZE';
+      position: absolute;
+      top: -11px; right: 14px;
+      background: var(--ember);
+      color: var(--ink);
+      font-family: 'Bungee', cursive;
+      font-size: 9px;
+      letter-spacing: 1px;
+      padding: 3px 10px;
+    }
+
+    /* ── SIDES STRIP ── */
+    .sides {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .side {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 9px 16px;
+      border: 1.5px solid var(--violet);
+      color: var(--cream);
+      background: #8b2fff12;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .side:hover {
+      background: #8b2fff35;
+      transform: translateY(-2px);
+    }
+
+    /* ── SHISHA BANNER ── */
+    .shisha {
+      margin-top: 72px;
+      position: relative;
+      background: linear-gradient(110deg, var(--hot), var(--magenta) 60%, var(--violet));
+      padding: 34px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      transform: rotate(-1deg);
+      box-shadow: 0 0 60px #ff0a5450, 8px 8px 0 var(--ink);
+      overflow: hidden;
+    }
+    .shisha::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        -45deg,
+        #ffffff0a 0 14px,
+        transparent 14px 28px
+      );
+    }
+    .shisha-name {
+      font-family: 'Bungee', cursive;
+      font-size: clamp(1.6rem, 6vw, 2.4rem);
+      color: var(--cream);
+      text-shadow: 3px 3px 0 var(--ink);
+      position: relative;
+    }
     .shisha-price {
-      font-family: 'Black Ops One', cursive;
-      font-size: 1.6rem;
-      color: var(--pink);
-      text-shadow: 0 0 20px var(--pink-glow);
+      font-family: 'Bungee', cursive;
+      font-size: clamp(1.6rem, 6vw, 2.2rem);
+      color: var(--ink);
+      background: var(--cream);
+      padding: 6px 16px;
+      position: relative;
+      box-shadow: 4px 4px 0 var(--ink);
+      white-space: nowrap;
+    }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.in {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     /* ── FOOTER ── */
     footer {
+      position: relative;
+      z-index: 2;
       text-align: center;
-      margin-top: 60px;
-      padding: 0 20px;
-      font-size: 0.78rem;
+      padding: 0 20px 56px;
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
       color: var(--muted);
-      letter-spacing: 1px;
+    }
+    footer .flame { color: var(--ember); }
+
+    @media (max-width: 480px) {
+      .combo { padding: 18px 16px; }
+      .combo-name { font-size: 17px; }
+      .combo-price { font-size: 19px; }
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <div class="event-badge">Menu</div>
-    <h1>CRUZZ<br>AVENUE</h1>
-    <div class="theme-tag">✦ INFERNO 2.0 ✦</div>
-    <p class="event-meta">Wed, June 10 · 8PM · No. 50 Ogundipe Street, Ketu, Lagos</p>
+  <div class="glow glow-1"></div>
+  <div class="glow glow-2"></div>
+
+  <!-- TICKER -->
+  <div class="ticker">
+    <div class="ticker-track">
+      INFERNO 2.0 ★ NO DRIP, NO ENTRY ★ WED JUNE 10 ★ 8PM TILL MAD ★ KETU, LAGOS ★ COME WITH A BOTTLE TO FUEL THE FIRE ★&nbsp;
+      INFERNO 2.0 ★ NO DRIP, NO ENTRY ★ WED JUNE 10 ★ 8PM TILL MAD ★ KETU, LAGOS ★ COME WITH A BOTTLE TO FUEL THE FIRE ★&nbsp;
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-tag">▲ THE MENU ▲</div>
+    <h1>CRUZZ<span class="row2">AVENUE</span></h1>
+    <div class="inferno">Inferno 2.0</div>
+    <p class="hero-meta">No. 50 Ogundipe Street · Ketu · Lagos</p>
   </header>
 
   <main>
 
-    <!-- CHICKEN COMBOS -->
-    <div class="section-label"><span>Chicken Combos</span></div>
-    <div class="menu-card">
-      <div class="menu-item">
+    <!-- COMBOS -->
+    <section class="sec reveal">
+      <div class="sec-num">01 / GRILL</div>
+      <h2>Chicken <span class="accent">Combos</span></h2>
+    </section>
+
+    <div class="combos">
+      <div class="combo reveal">
         <div>
-          <div class="item-name">1 Chicken + 2 Sides</div>
+          <div class="combo-name">1 Chicken · 2 Sides</div>
+          <div class="combo-sub">For the solo flame</div>
         </div>
-        <div class="item-price">₦6,000</div>
+        <div class="combo-price">₦6K</div>
       </div>
-      <div class="menu-item">
+      <div class="combo reveal">
         <div>
-          <div class="item-name">2 Chicken + 3 Sides</div>
+          <div class="combo-name">2 Chicken · 3 Sides</div>
+          <div class="combo-sub">Date-night heat</div>
         </div>
-        <div class="item-price">₦10,000</div>
+        <div class="combo-price">₦10K</div>
       </div>
-      <div class="menu-item">
+      <div class="combo flagship reveal">
         <div>
-          <div class="item-name">6 Chicken + 5 Sides</div>
+          <div class="combo-name">6 Chicken · 5 Sides</div>
+          <div class="combo-sub">Feed the whole gang</div>
         </div>
-        <div class="item-price">₦25,000</div>
+        <div class="combo-price">₦25K</div>
       </div>
     </div>
 
-    <!-- À LA CARTE -->
-    <div class="section-label"><span>À La Carte</span></div>
-    <div class="menu-card">
-      <div class="menu-item">
-        <div class="item-name">Chicken (Single)</div>
-        <div class="item-price">₦3,000</div>
-      </div>
-      <div class="menu-item">
-        <div class="item-name">Side (Single)</div>
-        <div class="item-price">₦1,500</div>
-      </div>
+    <!-- A LA CARTE -->
+    <section class="sec reveal">
+      <div class="sec-num">02 / SINGLES</div>
+      <h2>À La <span class="accent">Carte</span></h2>
+    </section>
+
+    <div class="item big reveal">
+      <span class="item-name">Chicken (Single)</span>
+      <span class="item-dots"></span>
+      <span class="item-price">₦3,000</span>
+    </div>
+    <div class="item big reveal">
+      <span class="item-name">Side (Single)</span>
+      <span class="item-dots"></span>
+      <span class="item-price">₦1,500</span>
     </div>
 
     <!-- SIDES -->
-    <div class="section-label"><span>Sides</span></div>
-    <div class="menu-card">
-      <div class="sides-grid">
-        <div class="side-chip">Fried Chips</div>
-        <div class="side-chip">Fried Sweet Potato</div>
-        <div class="side-chip">Fried Plantain</div>
-        <div class="side-chip">Grilled Corn</div>
-        <div class="side-chip">Grilled Plantain</div>
-      </div>
+    <section class="sec reveal">
+      <div class="sec-num">03 / PICK YOUR SIDES</div>
+      <h2>The <span class="accent">Sides</span></h2>
+    </section>
+
+    <div class="sides reveal">
+      <div class="side">Fried Chips</div>
+      <div class="side">Fried Sweet Potato</div>
+      <div class="side">Fried Plantain</div>
+      <div class="side">Grilled Corn</div>
+      <div class="side">Grilled Plantain</div>
     </div>
 
     <!-- SPIRITS -->
-    <div class="section-label"><span>Spirits</span></div>
-    <div class="menu-card">
-      <div class="menu-item">
-        <div class="item-name">Olemca</div>
-        <div class="item-price">₦35,000</div>
-      </div>
-      <div class="menu-item">
-        <div class="item-name">Jameson Green</div>
-        <div class="item-price">₦35,000</div>
-      </div>
-      <div class="menu-item">
-        <div class="item-name">Martell VS</div>
-        <div class="item-price">₦70,000</div>
-      </div>
-      <div class="menu-item">
-        <div class="item-name">Hennessy VS</div>
-        <div class="item-price">₦70,000</div>
-      </div>
-      <div class="menu-item">
-        <div class="item-name">Gordon's Gin</div>
-        <div class="item-price">₦5,000</div>
-      </div>
-      <div class="menu-item">
-        <div class="item-name">Sierra Tequila</div>
-        <div class="item-price">₦15,000</div>
-      </div>
+    <section class="sec reveal">
+      <div class="sec-num">04 / FUEL</div>
+      <h2>The <span class="accent">Spirits</span></h2>
+    </section>
+
+    <div class="item reveal">
+      <span class="item-name">Olemca</span>
+      <span class="item-dots"></span>
+      <span class="item-price">₦35,000</span>
+    </div>
+    <div class="item reveal">
+      <span class="item-name">Jameson Green</span>
+      <span class="item-dots"></span>
+      <span class="item-price">₦35,000</span>
+    </div>
+    <div class="item reveal">
+      <span class="item-name">Martell VS</span>
+      <span class="item-dots"></span>
+      <span class="item-price">₦70,000</span>
+    </div>
+    <div class="item reveal">
+      <span class="item-name">Hennessy VS</span>
+      <span class="item-dots"></span>
+      <span class="item-price">₦70,000</span>
+    </div>
+    <div class="item reveal">
+      <span class="item-name">Gordon's Gin</span>
+      <span class="item-dots"></span>
+      <span class="item-price">₦5,000</span>
+    </div>
+    <div class="item reveal">
+      <span class="item-name">Sierra Tequila</span>
+      <span class="item-dots"></span>
+      <span class="item-price">₦15,000</span>
     </div>
 
-    <!-- SOFT DRINKS -->
-    <div class="section-label"><span>Soft Drinks</span></div>
-    <div class="menu-card">
-      <div class="menu-item">
-        <div class="item-name">Coke</div>
-        <div class="item-price">₦1,000</div>
-      </div>
-      <div class="menu-item">
-        <div class="item-name">Sprite</div>
-        <div class="item-price">₦1,000</div>
-      </div>
-      <div class="menu-item">
-        <div class="item-name">Predator Energy</div>
-        <div class="item-price">₦1,000</div>
-      </div>
-      <div class="menu-item">
-        <div class="item-name">Water</div>
-        <div class="item-price">₦500</div>
-      </div>
+    <!-- SOFT -->
+    <section class="sec reveal">
+      <div class="sec-num">05 / CHASERS</div>
+      <h2>Soft <span class="accent">Drinks</span></h2>
+    </section>
+
+    <div class="item reveal">
+      <span class="item-name">Coke</span>
+      <span class="item-dots"></span>
+      <span class="item-price">₦1,000</span>
+    </div>
+    <div class="item reveal">
+      <span class="item-name">Sprite</span>
+      <span class="item-dots"></span>
+      <span class="item-price">₦1,000</span>
+    </div>
+    <div class="item reveal">
+      <span class="item-name">Predator Energy</span>
+      <span class="item-dots"></span>
+      <span class="item-price">₦1,000</span>
+    </div>
+    <div class="item reveal">
+      <span class="item-name">Water</span>
+      <span class="item-dots"></span>
+      <span class="item-price">₦500</span>
     </div>
 
     <!-- SHISHA -->
-    <div class="shisha-card">
-      <div class="shisha-label">🔥 Shisha</div>
-      <div class="shisha-price">₦10,000</div>
+    <div class="shisha reveal">
+      <div class="shisha-name">🔥 SHISHA</div>
+      <div class="shisha-price">₦10K</div>
     </div>
 
   </main>
 
   <footer>
-    <p>Come with a bottle to fuel the fire ···</p>
+    <p><span class="flame">▲</span> come with a bottle to fuel the fire <span class="flame">▲</span></p>
   </footer>
+
+  <script>
+    // Ember particles
+    const N = 18;
+    for (let i = 0; i < N; i++) {
+      const e = document.createElement('div');
+      e.className = 'ember';
+      e.style.left = Math.random() * 100 + 'vw';
+      e.style.setProperty('--sway', (Math.random() * 120 - 60) + 'px');
+      e.style.animationDuration = (6 + Math.random() * 8) + 's';
+      e.style.animationDelay = (Math.random() * 10) + 's';
+      e.style.width = e.style.height = (2 + Math.random() * 3) + 'px';
+      document.body.appendChild(e);
+    }
+
+    // Scroll reveal
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+  </script>
 
 </body>
 </html>
