@@ -3,91 +3,75 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cruzz Avenue — QR Menu Card</title>
-  <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet" />
+  <title>Cruzz Avenue — Scan to Order</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Syne+Mono&family=Syne:wght@400;600;700&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --pink: #ff2d78;
-      --pink-glow: #ff2d7880;
-      --purple: #7b2fff;
-      --bg: #0d0010;
-      --card: #160022;
-      --border: #ff2d7840;
-      --text: #f0d0ff;
-      --muted: #9060aa;
+      --bg: #080008;
+      --surface: #0f000f;
+      --pink: #ff2060;
+      --cream: #f5e6f0;
+      --muted: #6b4d6b;
+      --rule: #2a0c2a;
     }
 
     body {
-      background-color: var(--bg);
-      background-image:
-        radial-gradient(ellipse 100% 50% at 50% 0%, #3a006680 0%, transparent 70%),
-        radial-gradient(ellipse 60% 40% at 90% 90%, #ff2d7818 0%, transparent 60%);
-      color: var(--text);
-      font-family: 'Rajdhani', sans-serif;
+      background: var(--bg);
+      color: var(--cream);
+      font-family: 'Syne', sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 40px 20px;
+      padding: 64px 24px;
+      gap: 64px;
     }
 
     /* ── HEADER ── */
-    .header {
+    header {
       text-align: center;
-      margin-bottom: 48px;
     }
 
-    .event-badge {
-      display: inline-block;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 4px;
+    .eyebrow {
+      font-family: 'Syne Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 5px;
       text-transform: uppercase;
       color: var(--pink);
-      border: 1px solid var(--pink);
-      padding: 3px 12px;
-      border-radius: 2px;
-      margin-bottom: 16px;
-      text-shadow: 0 0 10px var(--pink-glow);
+      display: block;
+      margin-bottom: 20px;
     }
 
     h1 {
-      font-family: 'Black Ops One', cursive;
-      font-size: clamp(2.4rem, 8vw, 4.5rem);
+      font-family: 'Dela Gothic One', cursive;
+      font-size: clamp(3rem, 10vw, 6rem);
       line-height: 0.9;
-      background: linear-gradient(135deg, #fff 20%, var(--pink) 60%, #ff6eb0 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      filter: drop-shadow(0 0 16px var(--pink-glow));
-      letter-spacing: -1px;
+      letter-spacing: -2px;
+      color: var(--cream);
     }
 
-    .theme-tag {
-      display: inline-block;
-      margin-top: 12px;
-      font-family: 'Black Ops One', cursive;
-      font-size: 0.9rem;
-      letter-spacing: 4px;
-      color: var(--purple);
-      text-shadow: 0 0 12px #7b2fff80;
-    }
+    h1 .pink { color: var(--pink); }
 
-    .event-meta {
-      margin-top: 8px;
-      font-size: 0.8rem;
-      letter-spacing: 1px;
+    .meta {
+      margin-top: 20px;
+      font-size: 12px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
       color: var(--muted);
+      line-height: 2;
     }
 
     /* ── QR GRID ── */
-    .qr-grid {
+    .grid {
       display: flex;
-      gap: 32px;
+      align-items: flex-start;
+      gap: 48px;
       flex-wrap: wrap;
       justify-content: center;
     }
@@ -96,159 +80,149 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0;
+      gap: 24px;
     }
 
-    .qr-wrap {
-      background: #fff;
-      border-radius: 12px;
-      padding: 16px;
-      box-shadow: 0 0 40px var(--pink-glow);
-      position: relative;
+    .qr-frame {
+      background: var(--cream);
+      padding: 14px;
     }
 
-    .qr-wrap.offline {
-      box-shadow: 0 0 40px #7b2fff60;
-    }
-
-    .qr-wrap canvas {
-      display: block;
-    }
+    .qr-frame canvas { display: block; }
 
     .qr-label {
-      margin-top: 20px;
       text-align: center;
     }
 
-    .qr-label .tag {
+    .qr-tag {
       display: inline-block;
+      font-family: 'Syne Mono', monospace;
       font-size: 9px;
-      font-weight: 700;
       letter-spacing: 3px;
       text-transform: uppercase;
-      padding: 3px 10px;
-      border-radius: 2px;
-      margin-bottom: 8px;
-    }
-
-    .qr-block:first-child .tag {
-      background: var(--pink);
-      color: #fff;
-      text-shadow: none;
-    }
-
-    .qr-block:last-child .tag {
-      background: var(--purple);
-      color: #fff;
-      text-shadow: none;
-    }
-
-    .qr-label h3 {
-      font-family: 'Black Ops One', cursive;
-      font-size: 1rem;
-      letter-spacing: 1px;
-      color: var(--text);
-    }
-
-    .qr-label p {
-      font-size: 0.78rem;
+      padding: 4px 12px;
+      border: 1px solid var(--rule);
       color: var(--muted);
-      margin-top: 4px;
-      max-width: 180px;
-      line-height: 1.4;
+      margin-bottom: 10px;
+    }
+
+    .qr-block:first-child .qr-tag {
+      border-color: var(--pink);
+      color: var(--pink);
+    }
+
+    .qr-title {
+      font-family: 'Dela Gothic One', cursive;
+      font-size: 1rem;
+      letter-spacing: 0.5px;
+      color: var(--cream);
+    }
+
+    .qr-desc {
+      margin-top: 6px;
+      font-size: 11px;
+      letter-spacing: 1px;
+      color: var(--muted);
+      max-width: 160px;
+      line-height: 1.6;
     }
 
     /* ── DIVIDER ── */
-    .divider {
+    .sep {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      gap: 8px;
-      color: var(--muted);
-      font-size: 0.7rem;
-      letter-spacing: 2px;
-      font-weight: 700;
-      text-transform: uppercase;
-      padding: 0 8px;
+      gap: 12px;
+      padding-top: 32px;
     }
 
-    .divider::before,
-    .divider::after {
+    .sep::before,
+    .sep::after {
       content: '';
       width: 1px;
-      height: 40px;
-      background: linear-gradient(to bottom, transparent, var(--border), transparent);
+      height: 48px;
+      background: var(--rule);
+    }
+
+    .sep span {
+      font-family: 'Syne Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--muted);
+      text-transform: uppercase;
     }
 
     /* ── FOOTER ── */
     footer {
-      margin-top: 48px;
-      text-align: center;
-      font-size: 0.75rem;
+      border-top: 1px solid var(--rule);
+      padding-top: 32px;
+      width: 100%;
+      max-width: 560px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .footer-text {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
       color: var(--muted);
-      letter-spacing: 1px;
     }
 
-    footer a {
-      color: var(--pink);
-      text-decoration: none;
+    .dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--pink);
+      flex-shrink: 0;
     }
 
-    /* ── PRINT STYLES ── */
-    @media print {
-      body {
-        background: #fff;
-        color: #000;
-      }
-      .qr-wrap {
-        box-shadow: none;
-        border: 1px solid #ddd;
-      }
+    @media (max-width: 560px) {
+      .sep { display: none; }
+      footer { flex-direction: column; text-align: center; }
     }
   </style>
 </head>
 <body>
 
-  <div class="header">
-    <div class="event-badge">Scan to Order</div>
-    <h1>CRUZZ<br>AVENUE</h1>
-    <div class="theme-tag">✦ INFERNO 2.0 ✦</div>
-    <p class="event-meta">Wed, June 10 · 8PM · Ketu, Lagos</p>
-  </div>
+  <header>
+    <span class="eyebrow">✦ Scan to Order ✦</span>
+    <h1>CRUZZ<br><span class="pink">AVENUE</span></h1>
+    <p class="meta">Inferno 2.0 · Wed June 10 · 8PM · Ketu</p>
+  </header>
 
-  <div class="qr-grid">
+  <div class="grid">
 
-    <!-- QR 1: URL -->
     <div class="qr-block">
-      <div class="qr-wrap" id="qr-url"></div>
+      <div class="qr-frame" id="qr-url"></div>
       <div class="qr-label">
-        <div class="tag">Main Menu</div>
-        <h3>View Full Menu</h3>
-        <p>Scan to open the menu in your browser</p>
+        <div class="qr-tag">Main Menu</div>
+        <div class="qr-title">View Full Menu</div>
+        <p class="qr-desc">Opens the menu in your browser</p>
       </div>
     </div>
 
-    <div class="divider">or</div>
+    <div class="sep"><span>or</span></div>
 
-    <!-- QR 2: Offline text -->
     <div class="qr-block">
-      <div class="qr-wrap offline" id="qr-offline"></div>
+      <div class="qr-frame" id="qr-offline"></div>
       <div class="qr-label">
-        <div class="tag">No Internet?</div>
-        <h3>Offline Menu</h3>
-        <p>Scan to save the menu to your notes — no WiFi needed</p>
+        <div class="qr-tag">No Internet?</div>
+        <div class="qr-title">Offline Menu</div>
+        <p class="qr-desc">Saves the menu to your notes — no WiFi needed</p>
       </div>
     </div>
 
   </div>
 
   <footer>
-    <p>Come with a bottle to fuel the fire ···</p>
+    <span class="footer-text">Come with a bottle</span>
+    <div class="dot"></div>
+    <span class="footer-text">to fuel the fire</span>
   </footer>
 
   <script>
-    // ── CONFIG ──────────────────────────────────────────────
     const MENU_URL = 'https://cruzz-avenue-menu.vercel.app';
 
     const MENU_TEXT = `CRUZZ AVENUE - INFERNO 2.0
@@ -264,14 +238,13 @@ Martell N70k | Henny N70k
 Gordon N5k | Sierra N15k
 Coke/Sprite/Predator N1k | Water N500
 SHISHA N10k`;
-    // ────────────────────────────────────────────────────────
 
     new QRCode(document.getElementById('qr-url'), {
       text: MENU_URL,
       width: 200,
       height: 200,
-      colorDark: '#0d0010',
-      colorLight: '#ffffff',
+      colorDark: '#080008',
+      colorLight: '#f5e6f0',
       correctLevel: QRCode.CorrectLevel.M,
     });
 
@@ -279,8 +252,8 @@ SHISHA N10k`;
       text: MENU_TEXT,
       width: 200,
       height: 200,
-      colorDark: '#1a0033',
-      colorLight: '#ffffff',
+      colorDark: '#080008',
+      colorLight: '#f5e6f0',
       correctLevel: QRCode.CorrectLevel.L,
     });
   </script>
